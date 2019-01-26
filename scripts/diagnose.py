@@ -1,3 +1,7 @@
 import unirest
 
-print("hello")
+symptoms = "cough, runny nose, fever, congestion, chills"
+
+splitUp = symptoms.split(', ')
+
+print(splitUp)
