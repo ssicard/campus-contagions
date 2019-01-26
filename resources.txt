@@ -1,6 +1,6 @@
 Python flask tutorial:
 
-https://www.youtube.com/watch?v=ZVGwqnjOKjk
+https://www.youtube.com/watch?v=lj4I_CvBnt0
 
 Google app engine: 
 
