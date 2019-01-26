@@ -1,0 +1,7 @@
+Python flask tutorial:
+
+https://www.youtube.com/watch?v=ZVGwqnjOKjk
+
+Google app engine: 
+
+https://www.youtube.com/watch?v=j_zD8jfVQJ4
