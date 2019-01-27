@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+   <style> body {
+               background-color: #cccccc;}
+   </style>
+    <link rel="stylesheet" type="text/class" href="index.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+            <!-- Compiled and minified CSS -->
+        
+        <h1 style="color:#0000FF";>Sign up with us today!</h1> 
+      <p style="color:#008080";>Please fill in this form to create an account.</p>
+      <hr>
+            
+   <body>
+       
+      <form action = "result" method = "POST">
+         <p>Email Address<input type = "text" name = "Email Address" /></p>
+         <p>User ID<input type = "text" name = "User ID" /></p>
+         <p> Password <input type = "text" name = "Password" /></p>
+         <p> Repeat Password<input type ="text" name = "Repeat Password" /></p>
+        
+         <label>
+        <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+         </label>
+     <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+        <div class="clearfix">
+        <button type="button" class="cancelbtn">Cancel</button>
+        <button type="submit" class="signupbtn">Sign Up</button>
+      </div>
+      </form>
+      
+      <p>Or you can sign up with </p>
+   </body>
+</html>
+
+<html lang="en">
+  <head>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+  </head>
+  <body>
+    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <script>
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+      }
+    </script>
+  </body>
+</html>
