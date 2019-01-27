@@ -16,6 +16,8 @@ app = Flask(__name__)
 app.config['GOOGLEMAPS_KEY'] = api_key
 GoogleMaps(app)
 gmaps = googlemaps.Client(key=api_key)
+campusmap = None
+doctormap = None
 
 ################### MySQL Configurations  #########################
 mysql = MySQL()
@@ -90,7 +92,7 @@ def mapview():
     # creating a map in the view
     campusmap = Map(
         identifier="campusmap",
-      lat= 30.6123, 
+        lat= 30.6123, 
         lng= -96.3413,
         markers = all_symptom_locations,
         fit_markers_to_bounds = True,
@@ -110,15 +112,54 @@ def mapview():
     )
     return render_template('maps.html', campusmap=campusmap, doctormap=doctormap)
 
+@app.route('/diagnosis',methods=['GET','POST'])
+def diagnosis():
+    return render_template('diagnosis.html', campusmap=campusmap, doctormap=doctormap)
 
 
 @app.route('/diagnostics',methods=['GET','POST'])
 def diagnostics():
-<<<<<<< HEAD
+    all_symptom_locations = []
+    cursor.execute("SELECT latitude, longitude, symptoms, disease FROM symptom")
+    result = cursor.fetchall()
+    for item in result:
+        symptom = {'icon':'http://maps.google.com/mapfiles/ms/icons/orange-dot.png','lat' : item[0], 'lng' : item[1], 'infobox' : 'symptoms: ' + item[2] if item[3] is None else 'disease: ' + item[3] }
+        all_symptom_locations.append(symptom)
+    all_hospitals = []
+    result = gmaps.places_nearby(location=(30.6123,-96.3413), radius=16094, type='hospital')
+    for hospital in result.get("results"):
+        lat = hospital.get("geometry").get("location").get("lat")
+        lng = hospital.get("geometry").get("location").get("lng")
+        place = {'lat' : lat, 'lng' : lng, 'infobox' : hospital.get("name"),'icon':'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'}
+        all_hospitals.append(place)
+
+    # creating a map in the view
+    campusmap = Map(
+        identifier="campusmap",
+        lat= 30.6123, 
+        lng= -96.3413,
+        markers = all_symptom_locations,
+        fit_markers_to_bounds = True,
+        maptype_control = False,
+        streetview_control = False,
+        style = "height:400px;width:400px;margin:0;"
+    )
+    doctormap = Map(
+        identifier = "doctormap",
+        lat = 30.6123, 
+        lng = -96.3413,
+        markers = all_hospitals,
+        fit_markers_to_bounds = True,
+        maptype_control = False,
+        streetview_control = False,
+        style = "height:400px;width:400px;margin:0;"
+    )
     string = request.form['symptoms']
     gender = request.form['gender']
     yob = request.form['yob']
-    return str(string)
+    diagResult,symptomList = getDiagnosisResults(string, gender, yob)
+    diagResult = diagResult[:3]
+    return render_template('diagnosis.html', campusmap=campusmap, doctormap=doctormap, diagResult=diagResult)
 
 @app.route('/create_user',methods=['GET','POST'])
 def create_user():
@@ -128,19 +169,6 @@ def create_user():
     yearofbirth = str(request.form['year'])
     cursor.execute("INSERT INTO user(username, password_hash, sex, birthyear) VALUES ({{user}}, {{secret}}, {{gender}}, {{yearofbirth}})")
     return yearofbirth
-=======
-    text = request.form['input']
-    diagnosisResults,symptomList = getDiagnosisResults(text, 'male', '1984')
-    return (str(len(symptomList)) + str(len(diagnosisResults)))
-'''
-    class symptomForm(Form):
-    entry = StringField('')
-form = symptomForm()
-    return render_template('maps.html',form=form)
-'''
->>>>>>> 14fe487e370373159717ef078f258c3c410a3ffd
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
