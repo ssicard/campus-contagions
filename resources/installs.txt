@@ -1,0 +1,5 @@
+Required installations for the server:
+
+>> pip install unirest
+>> pip install flask-mysql
+>> pip install flask-googlemaps

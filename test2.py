@@ -3,7 +3,9 @@ from datetime import datetime
 from flask import Flask, render_template
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
-from key import api_key
+from key import api_key, db_pass
+from flaskext.mysql import MySQL
+
 
 ################### Set Globals  #########################
 
@@ -12,11 +14,19 @@ app.config['GOOGLEMAPS_KEY'] = api_key
 GoogleMaps(app)
 gmaps = googlemaps.Client(key=api_key)
 
-################### Set Directions  #########################
+################### MySQL Configurations  #########################
+mysql = MySQL()
 
-directions_result = gmaps.directions("Houston, TX", "Baton Rouge, LA")
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = db_pass
+app.config['MYSQL_DATABASE_DB'] = 'maindb'
+app.config['MYSQL_DATABASE_HOST'] = '35.193.222.83'
+mysql.init_app(app)
 
-################### Set Variables  #########################
+conn = mysql.connect()
+cursor = conn.cursor()
+
+################### Set Static Variables  #########################
 
 locations1 = [(37.4419, -96.3413), (37.4419, -96.3410)]
 mylocation = {
@@ -36,22 +46,60 @@ batonrouge = {
 			'lng':-91.1971
 		  }
 
-################### Set Doctor Map  #########################
+################### Set Routes  #########################
 
 @app.route("/")
+def index():
+  return "Hello World!"
+
+@app.route('/index')
+@app.route('/signin')
+def signin():
+  return render_template('signin.html')
+
+@app.route('/create')
+def create():
+  return render_template('create.html')
+
+@app.route('/mapview')
 def mapview():
-    doctormap = Map(
-        identifier="doctormap",
-        lat= 30.6123, 
+    all_symptom_locations = []
+    cursor.execute("SELECT latitude, longitude, symptoms, disease FROM symptom")
+    result = cursor.fetchall()
+    for item in result:
+        symptom = {'lat' : item[0], 'lng' : item[1], 'infobox' : 'symptoms: ' + item[2] if item[3] is None else 'disease: ' + item[3] }
+        all_symptom_locations.append(symptom)
+
+    all_hospitals = []
+    result = gmaps.places_nearby(location=(30.6123,-96.3413), radius=16094, type='hospital')
+    for hospital in result.get("results"):
+        lat = hospital.get("geometry").get("location").get("lat")
+        lng = hospital.get("geometry").get("location").get("lng")
+        place = {'lat' : lat, 'lng' : lng, 'infobox' : hospital.get("name") }
+        all_hospitals.append(place)
+
+    # creating a map in the view
+    campusmap = Map(
+        identifier="campusmap",
+      lat= 30.6123, 
         lng= -96.3413,
-        markers=[mylocation, defaultdoc],
-        #center_on_user_location = True,
+        markers = all_symptom_locations,
         fit_markers_to_bounds = True,
         maptype_control = False,
         streetview_control = False,
-        fullscreen_control = False
+        style = "height:400px;width:400px;margin:0;"
     )
-    return render_template('index.html', doctormap=doctormap)
+    doctormap = Map(
+        identifier = "doctormap",
+        lat = 30.6123, 
+        lng = -96.3413,
+        markers = all_hospitals,
+        fit_markers_to_bounds = True,
+        maptype_control = False,
+        streetview_control = False,
+        style = "height:400px;width:400px;margin:0;"
+    )
+    return render_template('maps.html', campusmap=campusmap, doctormap=doctormap)
 
 if __name__ == '__main__':
     app.run(debug=True)
