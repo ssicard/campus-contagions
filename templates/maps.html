@@ -12,18 +12,19 @@
         {{campusmap.js}}
         {{doctormap.js}}
     </head>
-    <body>
-        <h1>Flask Maps</h1>
+    <body style="padding: 30px" >
+        <h1>Campus Contagion</h1>
 
-        {% if doctormap.center_on_user_location %}
-            mylocation.lat = pos.lat
-            mylocation.long = pos.long
-        {% endif %}
-
-
-        <h2> Doctor Address </h2>
-        {{campusmap.html}}
-        {{doctormap.html}}
+        <div style="width: 100%; overflow: hidden;">
+            <div style="float: left;">
+                <h2>Trending </h2>
+                <div>{{campusmap.html}}</div>
+            </div>
+            <div style="float: right;">
+                <h2> Nearby Clinics </h2>
+                <div>{{doctormap.html}}</div>
+            </div>
+        </div>
 
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
