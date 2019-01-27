@@ -1,0 +1,11 @@
+Python flask tutorial:
+
+https://www.youtube.com/watch?v=lj4I_CvBnt0
+
+Google app engine: 
+
+https://www.youtube.com/watch?v=j_zD8jfVQJ4
+
+GCP info/server setup:
+
+https://www.youtube.com/watch?v=eYj3a9RsA5s

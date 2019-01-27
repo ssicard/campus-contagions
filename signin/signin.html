@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+	<head>
+		<title> Sign In </title>
+		<script src="auth.js"></script>
+	</head>
+	<body>
+		Hello! And wecome to <b> our creative app name </b> <br> <br>
+
+		<h1> Sign In </h1>
+
+		<label>Username: </label>
+		<input type = "text"
+               id = "myText"
+               placeholder="type username here" />
+		<label>Password: </label>
+		<input type = "text"
+               id = "myText"
+               placeholder="type password here" />
+        <br>
+        <button> Sign In </button>
+
+
+       <!--  <h2> Snapchat Login </h2>
+		<div id="my-login-button-target" />
+		<script>
+	       window.snapKitInit = function () {
+	        var loginButtonIconId = 'my-login-button-target';
+
+
+			var loginParamsObj = {
+			  // Override this parameter `handleAuthGrantFlowCallback`
+			  handleAuthGrantFlowCallback:
+			    function handleAuthGrantFlowCallback(){
+			      // TO START THE OAUTH2.0 AUTHORIZATION
+			      // GRANT FLOW, POINT THIS CALLBACK TO
+			      // YOUR APPLICATION’S BACKEND HANDLER
+			    },
+			  clientId: 'your-clientId',
+			  redirectURI: 'your-redirectURI', // REMOVE THIS
+			  scopeList: ['your-scope(s)'], // REMOVE THIS
+			};
+
+
+
+	        // Mount Login Button
+			snap.loginkit.mountButton(loginButtonDivId, loginParams, accessToken);
+
+	      // Load the SDK asynchronously
+	      (function (d, s, id) {
+	        var js, sjs = d.getElementsByTagName(s)[0];
+	        if (d.getElementById(id)) return;
+	        js = d.createElement(s); js.id = id;
+	        js.src = "https://sdk.snapkit.com/js/v1/login.js";
+	        sjs.parentNode.insertBefore(js, sjs);
+	      }(document, 'script', 'loginkit-sdk'));
+
+
+
+			// ******************** Crypto Library Helper ***************************
+			var _crypto = require('crypto');
+
+			var OAUTH2_STATE_BYTES = 32;
+			var REGEX_PLUS_SIGN = /\+/g;
+			var REGEX_FORWARD_SLASH = /\//g;
+			var REGEX_EQUALS_SIGN = /=/g;
+
+			/*
+			 * This function generates a random amount of bytes using the
+			 * crypto library
+			 *
+			 * @param {int} size - The number of random bytes to generate.
+			 *
+			 * @returns {Buffer} The generated number of bytes
+			 */
+			var generateRandomBytes = function generateRandomBytes(size) {
+			  return _crypto.randomBytes(size);
+			};
+
+			/*
+			 * This function encodes the given byte buffer into a base64 URL
+			 * safe string.
+			 *
+			 * @param {Buffer} bytesToEncode - The bytes to encode
+			 *
+			 * @returns {string} The URL safe base64 encoded string
+			 */
+			var generateBase64UrlEncodedString = function generateBase64UrlEncodedString(bytesToEncode) {
+			  return bytesToEncode
+			    .toString('base64')
+			    .replace(REGEX_PLUS_SIGN, '-')
+			    .replace(REGEX_FORWARD_SLASH, '_')
+			    .replace(REGEX_EQUALS_SIGN, '');
+			};
+
+			/*
+			 * This function generates the state required for both the
+			 * OAuth2.0 Authorization and Implicit grant flow
+			 *
+			 * @returns {string} The URL safe base64 encoded string
+			 */
+			var generateClientState = exports.generateClientState = function generateClientState() {
+			  return generateBase64UrlEncodedString(
+			    generateRandomBytes(OAUTH2_STATE_BYTES)
+			  );
+			};
+
+
+
+			// ******************** URL Builder Helper ***********************
+
+			var _qs = require('qs'); // Will need to 'npm install qs'
+
+			var getAuthCodeRedirectURL = function getAuthCodeRedirectURL(clientId, redirectUri, scopeList, state) {
+			  var SNAP_ACCOUNTS_LOGIN_URL = 'https://accounts.snapchat.com/accounts/oauth2/auth';
+			  var scope = scopeList.join(' ');
+			  var loginQS = {
+			    client_id: clientId,
+			    redirect_uri: redirectUri,
+			    response_type: 'code',
+			    scope: scope,
+			    state: state
+			  };
+
+			  var stringifyLoginQS = _qs.stringify(loginQS);
+			  return SNAP_ACCOUNTS_LOGIN_URL + '?' + stringifyLoginQS;
+			};
+
+
+			
+
+			
+
+			
+
+			// ******************** ExpressJS Server Main Logic ************************
+
+			var express = require('express'); // Will need to 'npm install express'
+			var request = require('request'); // Will need to 'npm install request'
+
+			var app = express();
+
+			var clientId = 'my-assigned-client-id';
+			var clientSecret = 'my-assigned-client-secret';
+
+			var redirectUri = 'https://my-redirect-uri.com';
+			var scopeList = ['https://auth.snapchat.com/oauth2/api/example.abc', 'https://auth.snapchat.com/oauth2/api/example.xyz'];
+
+			app.get('/send-oauth-GET-request-step-two', function(req, res){
+			   // ..
+			});
+
+			app.get('/send-access-token-POST-request-step-five', function(req, res) {
+			  // ..
+			});
+
+			app.get('/send-refresh-token-POST-request-step-six', function(req, res) {
+			  // ..
+			});
+
+			app.get('/send-revoke-token-POST-request-step-seven', function(req, res) {
+			  var SNAPCHAT_AUTH_REVOKE_ENDPOINT = 'https://accounts.snapchat.com/accounts/oauth2/revoke';
+
+			  var authorizationHeader = clientId + ':' + clientSecret;
+			  var authorizationHeaderBase64 = Buffer.from(authorizationHeader).toString('base64');
+
+			  // Set headers
+			  var headers = {
+			    'Content-Type': 'application/x-www-form-urlencoded',
+			    'Authorization': 'Basic ' + authorizationHeaderBase64,
+			  }
+
+			  // configure refresh token POST request
+			  var options = {
+			    url: SNAPCHAT_AUTH_REVOKE_ENDPOINT,
+			    method: 'POST',
+			    headers: headers,
+			    form:{
+			      token: refresh_token, // refresh_token is value from step six
+			    }
+			  };
+
+			  // Start POST request
+			  request(options, function (error, response, body) {
+			      // Clear access_token, refresh_token, and expires_in values
+			      res.send(response)
+			  })
+			});
+
+			app.listen(3000);
+
+
+
+
+
+
+
+
+
+	    </script> -->
+
+		<br><br><br><br>
+
+		Don't have an account? <a href="_blank"> Sign up here </a>
+	</body>
+
+</html>
