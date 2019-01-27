@@ -75,7 +75,7 @@ def mapview():
     for hospital in result.get("results"):
         lat = hospital.get("geometry").get("location").get("lat")
         lng = hospital.get("geometry").get("location").get("lng")
-        place = {'lat' : lat, 'lng' : lng, 'infobox' : hospital.get("name") }
+        place = {'lat' : lat, 'lng' : lng, 'infobox' : hospital.get("name"),'icon':'https://github.com/ssicard/campus-contagions/blob/master/resources/clinicIcon.png' }
         all_hospitals.append(place)
 
     # creating a map in the view
