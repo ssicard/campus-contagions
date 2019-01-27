@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
 from flaskext.mysql import MySQL
+from key import db_pass
 #  import pymysql
 
 app = Flask(__name__, template_folder=".")
@@ -12,7 +13,7 @@ mysql = MySQL()
 
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'INSERTROOTPASSWORDHERE'
+app.config['MYSQL_DATABASE_PASSWORD'] = db_pass
 app.config['MYSQL_DATABASE_DB'] = 'maindb'
 app.config['MYSQL_DATABASE_HOST'] = '35.193.222.83'
 mysql.init_app(app)
