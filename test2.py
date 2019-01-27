@@ -7,6 +7,9 @@ import json
 from key import api_key, db_pass
 from flaskext.mysql import MySQL
 from diagnose import getDiagnosisResults
+import geocoder
+import random
+import decimal
 
 symptomList = []
 
@@ -33,32 +36,20 @@ cursor = conn.cursor()
 
 ################### Set Static Variables  #########################
 
-locations1 = [(37.4419, -96.3413), (37.4419, -96.3410)]
-mylocation = {
-             'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-             'lat': 30.6123, 
-             'lng': -96.3413,
-             'infobox': "<b>Where You Are</b>"
-          }
-defaultdoc = {
-            'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-            'lat': 30.6156, 
-            'lng': -96.3427,
-            'infobox': "<b>My Doctor</b>"
-          }
-batonrouge = {
-			'lat':30.4515,
-			'lng':-91.1971
-		  }
+current_loc = geocoder.ip('me')
+lat_lng = current_loc.latlng
+my_lat = lat_lng[0]
+my_lng = lat_lng[1]
 
 
-all_hospitals = []
-result = gmaps.places_nearby(location=(30.6123,-96.3413), radius=16094, type='hospital')
-for hospital in result.get("results"):
-    lat = hospital.get("geometry").get("location").get("lat")
-    lng = hospital.get("geometry").get("location").get("lng")
-    place = {'lat' : lat, 'lng' : lng, 'infobox' : hospital.get("name") }
-    all_hospitals.append(place)
+def anonymize(val):
+    num = float(decimal.Decimal(random.randrange(30, 110))/10000)
+    if bool(random.getrandbits(1)):
+        val += num
+    else:
+        val -= num
+    return val
+
 
 ################### Set Routes  #########################
 
@@ -78,11 +69,11 @@ def mapview():
     cursor.execute("SELECT latitude, longitude, symptoms, disease FROM symptom")
     result = cursor.fetchall()
     for item in result:
-        symptom = {'icon':'http://maps.google.com/mapfiles/ms/icons/orange-dot.png','lat' : item[0], 'lng' : item[1], 'infobox' : 'symptoms: ' + item[2] if item[3] is None else 'disease: ' + item[3] }
+        symptom = {'icon':'http://maps.google.com/mapfiles/ms/icons/orange-dot.png','lat' : anonymize(item[0]), 'lng' : anonymize(item[1]), 'infobox' : 'symptoms: ' + item[2] }
         all_symptom_locations.append(symptom)
 
     all_hospitals = []
-    result = gmaps.places_nearby(location=(30.6123,-96.3413), radius=16094, type='hospital')
+    result = gmaps.places_nearby(location=(my_lat,my_lng), radius=16094, type='hospital')
     for hospital in result.get("results"):
         lat = hospital.get("geometry").get("location").get("lat")
         lng = hospital.get("geometry").get("location").get("lng")
@@ -92,8 +83,8 @@ def mapview():
     # creating a map in the view
     campusmap = Map(
         identifier="campusmap",
-        lat= 30.6123, 
-        lng= -96.3413,
+        lat= my_lat, 
+        lng= my_lng,
         markers = all_symptom_locations,
         fit_markers_to_bounds = True,
         maptype_control = False,
@@ -102,8 +93,8 @@ def mapview():
     )
     doctormap = Map(
         identifier = "doctormap",
-        lat = 30.6123, 
-        lng = -96.3413,
+        lat = my_lat, 
+        lng = my_lng,
         markers = all_hospitals,
         fit_markers_to_bounds = True,
         maptype_control = False,

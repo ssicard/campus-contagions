@@ -6,54 +6,46 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="static/maps.css">
 
-        <title>Campus Contagions</title>
+        <title>Testing Flask</title>
         {{campusmap.js}}
         {{doctormap.js}}
-    <body>
-        <h1>Campus Contagions</h1>
-        <div style="table-layout: auto ">
-            <h3> Symptoms </h3>
-            <p> Please separate your symptoms with commas </p>
-            <form action='diagnostics' method='POST'>
-                <p> Symptoms:
-                    <input type="text" name="symptoms" id="symptoms">
-                </p>
-                <p> Gender:
-                    <input type="text" name="gender" id="gender">
-                </p>
-                <p> Birth Year:
-                    <input type="text" name="yob" id="yob">
-                </p>
+    </head>
+    <body style="padding: 30px" >
+        <h1 style="font-size:100px;text-align:center;margin-bottom:75px">Campus Contagions</h1>
+        <div >
+            <div align = 'center' height="40px">Enter Symptoms (comma separated)</label>
+            <form action='diagnostics' method='POST' align='center'>
+                <input type='text' id='input' name='input' minlength='4'>
                 <input type='submit' value='Enter'>
-            </form>    
+            </form>
+            
         </div>
-        <div style="float: left;">
-            <h3> Symptom Map </h3>
-            <div style="margin-bottom:10px">{{campusmap.html}}</div>
-            <div id="campusmaplegend">
+        <div style="float:left;display:table">
+            <div style = "display:table-row">
                 <div style="height:13px;width:13px;background-color:#fd9827;float:left;display:table-cell;margin-right:5px"></div>
                 <div style="margin-left:10px;display:table-cell;">Local Symptoms</div>
-                <div style="height:13px;width:13px;background-color:red;float:left;display:table-cell;margin-right:10px"></div>
+                <div style="height:13px;width:13px;background-color:red;float:left;display:table-cell;margin-left:10px;margin-right:10px"></div>
                 <div style="margin-left:10px;display:table-cell">Local Diagnoses</div>
             </div>
         </div>
-        <div style="float:right;">
-            <h3> Doctor Map </h3>
-            <div style="float:right;">
-                <div style="">{{doctormap.html}}</div>
-            </div>
-            <div>
-                <div>
+        
+
+        <div style="width: 100%; overflow: hidden;margin-top:10px">
+            <div style="margin-bottom:10px">{{campusmap.html}}</div>
+            <div style=";display:table;">
+                <div style = "display:table-row">
                     <div style="height:10px;width:10px;background-color:#6b95f9;float:left;display:table-cell;margin-right:13px"></div>
-                    <div style="margin-left:13px;">Nearby Clinics</div>
+                    <div style="margin-left:13px;display:table-cell">Nearby Clinics</div>
                 </div>
             </div>
-        </div>
             <div style="float:right;width: 100%; overflow: hidden;">
                 <div style="">{{doctormap.html}}</div>
             </div>
+            
+            
         </div>
         
+
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
