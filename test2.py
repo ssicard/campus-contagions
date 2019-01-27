@@ -1,10 +1,12 @@
 import googlemaps
 from datetime import datetime
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
 from key import api_key, db_pass
 from flaskext.mysql import MySQL
+from flask_wtf import Form
+from wtforms import StringField
 
 
 ################### Set Globals  #########################
@@ -67,7 +69,7 @@ def mapview():
     cursor.execute("SELECT latitude, longitude, symptoms, disease FROM symptom")
     result = cursor.fetchall()
     for item in result:
-        symptom = {'lat' : item[0], 'lng' : item[1], 'infobox' : 'symptoms: ' + item[2] if item[3] is None else 'disease: ' + item[3] }
+        symptom = {'icon':'http://maps.google.com/mapfiles/ms/icons/orange-dot.png','lat' : item[0], 'lng' : item[1], 'infobox' : 'symptoms: ' + item[2] if item[3] is None else 'disease: ' + item[3] }
         all_symptom_locations.append(symptom)
 
     all_hospitals = []
@@ -75,7 +77,7 @@ def mapview():
     for hospital in result.get("results"):
         lat = hospital.get("geometry").get("location").get("lat")
         lng = hospital.get("geometry").get("location").get("lng")
-        place = {'lat' : lat, 'lng' : lng, 'infobox' : hospital.get("name"),'icon':'https://github.com/ssicard/campus-contagions/blob/master/resources/clinicIcon.png' }
+        place = {'lat' : lat, 'lng' : lng, 'infobox' : hospital.get("name"),'icon':'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'}
         all_hospitals.append(place)
 
     # creating a map in the view
@@ -100,6 +102,21 @@ def mapview():
         style = "height:400px;width:400px;margin:0;"
     )
     return render_template('maps.html', campusmap=campusmap, doctormap=doctormap)
+
+
+
+@app.route('/diagnostics',methods=['GET','POST'])
+def diagnostics():
+    text = request.form['input']
+    return str(text)
+'''
+    class symptomForm(Form):
+    entry = StringField('')
+form = symptomForm()
+    return render_template('maps.html',form=form)
+'''
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

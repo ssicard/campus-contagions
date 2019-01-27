@@ -1,3 +1,4 @@
+{% from "_formhelpers.html" import render_field %}
 <!DOCTYPE html>
     <html>
     <head>
@@ -36,6 +37,13 @@
                 <div style="">{{doctormap.html}}</div>
             </div>
             
+            
+        </div>
+        <div>
+            <form action='diagnostics' method='POST'>
+                <input type='text' id='input' name='input' minlength='4'>
+                <input type='submit' value='Enter'>
+            </form>
             
         </div>
 
