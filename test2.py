@@ -6,8 +6,6 @@ from flask_googlemaps import Map
 import json
 from key import api_key, db_pass
 from flaskext.mysql import MySQL
-from flask_wtf import Form
-from wtforms import StringField
 
 ################### Set Globals  #########################
 
