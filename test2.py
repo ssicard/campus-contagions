@@ -111,7 +111,9 @@ def mapview():
 
 @app.route('/diagnostics',methods=['GET','POST'])
 def diagnostics():
-    string = request.form['input']
+    string = request.form['symptoms']
+    gender = request.form['gender']
+    yob = request.form['yob']
     return str(string)
 
 @app.route('/create_user',methods=['GET','POST'])
