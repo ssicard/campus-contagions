@@ -7,7 +7,7 @@ from key import api_key
 
 ################### Set Globals  #########################
 
-app = Flask(__name__, template_folder=".")
+app = Flask(__name__)
 app.config['GOOGLEMAPS_KEY'] = api_key
 GoogleMaps(app)
 gmaps = googlemaps.Client(key=api_key)
