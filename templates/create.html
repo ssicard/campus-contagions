@@ -6,9 +6,8 @@
       }
    </style>
    <head>
-    <link rel="stylesheet" type="text/class" href="index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-            <!-- Compiled and minified CSS -->
+      <link rel="stylesheet" type="text/class" href="style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
     </head>
     <body>
 
@@ -16,25 +15,33 @@
     <p style="color:#008080";>Please fill in this form to create an account.</p>
     <hr>
             
-      <form>
+      <!-- <form method="POST">
           <p>Username 
-            <input type = "text" name = "User ID" />
+            <input type = "text" name="username" />
           </p>
            <p> Password 
-            <input type = "text" name = "Password" />
+            <input type = "text" name="password" />
           </p>
-           <p> Repeat Password
-            <input type ="text" name = "Repeat Password" />
+           <p> Gender
+           <input type = "text" name="sex" />
           </p>
+          <p> Year of Birth
+            <input type="text" name="birthyear">
+      </form> -->
+
+      <form action="result" method="POST">
+        <input type="text" name="input" id="input"></input>
+        <input type="submit" value="Signup"></input>
+      </form>
+
              
-        <div>
+        <!-- <div>
           <a href="{{url_for('signin')}}">
             <button type="button" class="cancelbtn">Back</button> 
           </a>
-          <a href="../maps/index.html">
+          <a href="{{url_for('mapview')}}">
             Sign Up
           </a>
-        </div>
-      </form>
+        </div> -->
    </body>
 </html>
