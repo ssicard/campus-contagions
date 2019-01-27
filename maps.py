@@ -1,23 +1,41 @@
 from flask import Flask, render_template
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
-
-#from datetime import datetime
+from flaskext.mysql import MySQL
+#  import pymysql
 
 app = Flask(__name__, template_folder=".")
 app.config['GOOGLEMAPS_KEY'] = "AIzaSyD8YhyiKR0S4FAC91f6L5bWDLROOh723pE"
 GoogleMaps(app)
 
-campusmarkers = [(37.4419, -96.3413), (37.4419, -96.3410)]
+mysql = MySQL()
+
+# MySQL configurations
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'INSERTROOTPASSWORDHERE'
+app.config['MYSQL_DATABASE_DB'] = 'maindb'
+app.config['MYSQL_DATABASE_HOST'] = '35.193.222.83'
+mysql.init_app(app)
+
+conn = mysql.connect()
+cursor = conn.cursor()
+
 
 @app.route("/")
 def mapview():
+    all_locations = []
+    cursor.execute("SELECT latitude, longitude FROM symptom")
+    result = cursor.fetchall()
+    for item in result:
+        all_locations.append(item)
+
     # creating a map in the view
     campusmap = Map(
         identifier="view-side",
      	lat= 30.6123, 
         lng= -96.3413,
-        markers=[(37.4419, -96.3413)]
+        markers = all_locations,
+        fit_markers_to_bounds = True
     )
     doctormap = Map(
         identifier="doctormap",
