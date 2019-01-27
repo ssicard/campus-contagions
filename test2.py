@@ -3,11 +3,11 @@ from datetime import datetime
 from flask import Flask, render_template, request
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
+import json
 from key import api_key, db_pass
 from flaskext.mysql import MySQL
 from flask_wtf import Form
 from wtforms import StringField
-
 
 ################### Set Globals  #########################
 
@@ -48,12 +48,18 @@ batonrouge = {
 			'lng':-91.1971
 		  }
 
+
+all_hospitals = []
+result = gmaps.places_nearby(location=(30.6123,-96.3413), radius=16094, type='hospital')
+for hospital in result.get("results"):
+    lat = hospital.get("geometry").get("location").get("lat")
+    lng = hospital.get("geometry").get("location").get("lng")
+    place = {'lat' : lat, 'lng' : lng, 'infobox' : hospital.get("name") }
+    all_hospitals.append(place)
+
 ################### Set Routes  #########################
 
 @app.route("/")
-def index():
-  return "Hello World!"
-
 @app.route('/index')
 @app.route('/signin')
 def signin():
