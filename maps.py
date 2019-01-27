@@ -24,14 +24,15 @@ cursor = conn.cursor()
 @app.route("/")
 def mapview():
     all_locations = []
-    cursor.execute("SELECT latitude, longitude FROM symptom")
+    cursor.execute("SELECT latitude, longitude, symptoms, disease FROM symptom")
     result = cursor.fetchall()
     for item in result:
-        all_locations.append(item)
+        location = {'lat' : item[0], 'lng' : item[1], 'infobox' : 'symptoms: ' + item[2] if item[3] is None else 'disease: ' + item[3] }
+        all_locations.append(location)
 
     # creating a map in the view
     campusmap = Map(
-        identifier="view-side",
+        identifier="campusmap",
      	lat= 30.6123, 
         lng= -96.3413,
         markers = all_locations,
