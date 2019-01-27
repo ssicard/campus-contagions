@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+	<head>
+		<title> Sign In </title>
+		<script src="auth.js"></script>
+	</head>
+	<body>
+		Hello! And wecome to <em> Campus Contagions </em> <br> <br>
+
+		<h1> Sign In </h1>
+
+		<label>Username: </label>
+		<input type = "text"
+               id = "myText"
+               placeholder="type username here" />
+		<label>Password: </label>
+		<input type = "text"
+               id = "myText"
+               placeholder="type password here" />
+        <br>
+        <a href="{{ url_for('mapview')}}"><button> Sign In </button> </a>
+
+		<br><br><br><br>
+
+		<h5>Don't have an account?</h5> 
+		<a href="{{ url_for('create')}}"> Sign up here </a>
+	</body>
+
+</html>
