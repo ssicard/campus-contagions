@@ -105,21 +105,6 @@ def mapview():
 
 @app.route('/diagnostics',methods=['GET','POST'])
 def diagnostics():
-<<<<<<< HEAD
-    string = request.form['symptoms']
-    gender = request.form['gender']
-    yob = request.form['yob']
-    return str(string)
-
-@app.route('/create_user',methods=['GET','POST'])
-def create_user():
-    user = str(request.form['username'])
-    secret = str(request.form['password'])
-    gender = str(request.form['gender'])
-    yearofbirth = str(request.form['year'])
-    cursor.execute("INSERT INTO user(username, password_hash, sex, birthyear) VALUES ({{user}}, {{secret}}, {{gender}}, {{yearofbirth}})")
-    return yearofbirth
-=======
     text = request.form['input']
     diagnosisResults,symptomList = getDiagnosisResults(text, 'male', '1984')
     for symptom in symptomList:
@@ -132,7 +117,6 @@ def create_user():
 form = symptomForm()
     return render_template('maps.html',form=form)
 '''
->>>>>>> 14fe487e370373159717ef078f258c3c410a3ffd
 
 
 
