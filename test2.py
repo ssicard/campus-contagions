@@ -111,14 +111,17 @@ def mapview():
 
 @app.route('/diagnostics',methods=['GET','POST'])
 def diagnostics():
-    text = request.form['input']
-    return str(text)
-'''
-    class symptomForm(Form):
-    entry = StringField('')
-form = symptomForm()
-    return render_template('maps.html',form=form)
-'''
+    string = request.form['input']
+    return str(string)
+
+@app.route('/create_user',methods=['GET','POST'])
+def create_user():
+    user = str(request.form['username'])
+    secret = str(request.form['password'])
+    gender = str(request.form['gender'])
+    yearofbirth = str(request.form['year'])
+    cursor.execute("INSERT INTO user(username, password_hash, sex, birthyear) VALUES ({{user}}, {{secret}}, {{gender}}, {{yearofbirth}})")
+    return yearofbirth
 
 
 

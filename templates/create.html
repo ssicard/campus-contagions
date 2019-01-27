@@ -14,25 +14,19 @@
     <h1 style="color:#0000FF";>Sign up with us today!</h1> 
     <p style="color:#008080";>Please fill in this form to create an account.</p>
     <hr>
-            
-      <!-- <form method="POST">
-          <p>Username 
-            <input type = "text" name="username" />
-          </p>
-           <p> Password 
-            <input type = "text" name="password" />
-          </p>
-           <p> Gender
-           <input type = "text" name="sex" />
-          </p>
-          <p> Year of Birth
-            <input type="text" name="birthyear">
-      </form> -->
+        <div>
+            <form action='create_user' method='POST'>
+                <input type='text' id='username' name='username'>
 
-      <form action="result" method="POST">
-        <input type="text" name="input" id="input"></input>
-        <input type="submit" value="Signup"></input>
-      </form>
+                <input type='password' id='password' name='password' >
+
+                <input type='text' id='gender' name='gender'>
+
+                <input type='text' id='year' name='year' minlength="4" maxlength="4">
+                <input type='submit' value='Enter'>
+            </form>
+            
+        </div>
 
              
         <!-- <div>
