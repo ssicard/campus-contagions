@@ -60,9 +60,6 @@ for hospital in result.get("results"):
 ################### Set Routes  #########################
 
 @app.route("/")
-def index():
-  return "Hello World!"
-
 @app.route('/index')
 @app.route('/signin')
 def signin():
