@@ -112,7 +112,7 @@ def getDiagnosisResults(symptomString, gender, birthYear):
         headers={"X-RapidAPI-Key": "5cfd5f6a39mshb4dc4e26d173e45p15e8c7jsnfc8818261be7"})
 
     #returns the diagnosis json file
-    return diagnosisResults.body
+    return (diagnosisResults.body,symptomNames)
     
 
 def getSymptomList():

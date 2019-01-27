@@ -7,8 +7,9 @@ from key import api_key, db_pass
 from flaskext.mysql import MySQL
 from flask_wtf import Form
 from wtforms import StringField
+from diagnose import getDiagnosisResults
 
-
+symptomList = []
 ################### Set Globals  #########################
 
 app = Flask(__name__)
@@ -108,7 +109,8 @@ def mapview():
 @app.route('/diagnostics',methods=['GET','POST'])
 def diagnostics():
     text = request.form['input']
-    return str(text)
+    diagnosisResults,symptomList = getDiagnosisResults(text, 'male', '1984')
+    return (str(len(symptomList)) + str(len(diagnosisResults)))
 '''
     class symptomForm(Form):
     entry = StringField('')
