@@ -13,17 +13,30 @@
         {{doctormap.js}}
     </head>
     <body style="padding: 30px" >
-        <h1>Campus Contagion</h1>
+        <h1 style="font-size:100px;text-align:center;margin-bottom:75px">Campus Contagions</h1>
+        <div style="float:left;display:table">
+            <div style = "display:table-row">
+                <div style="height:13px;width:13px;background-color:#fd9827;float:left;display:table-cell;margin-right:5px"></div>
+                <div style="margin-left:10px;display:table-cell;">Local Symptoms</div>
+                <div style="height:13px;width:13px;background-color:red;float:left;display:table-cell;margin-left:10px;margin-right:10px"></div>
+                <div style="margin-left:10px;display:table-cell">Local Diagnoses</div>
+            </div>
+        </div>
+        
 
-        <div style="width: 100%; overflow: hidden;">
-            <div style="float: left;">
-                <h2>Trending </h2>
-                <div>{{campusmap.html}}</div>
+        <div style="width: 100%; overflow: hidden;margin-top:10px">
+            <div style="margin-bottom:10px">{{campusmap.html}}</div>
+            <div style=";display:table;">
+                <div style = "display:table-row">
+                    <div style="height:10px;width:10px;background-color:#6b95f9;float:left;display:table-cell;margin-right:13px"></div>
+                    <div style="margin-left:13px;display:table-cell">Nearby Clinics</div>
+                </div>
             </div>
-            <div style="float: right;">
-                <h2> Nearby Clinics </h2>
-                <div>{{doctormap.html}}</div>
+            <div style="float:right;width: 100%; overflow: hidden;">
+                <div style="">{{doctormap.html}}</div>
             </div>
+            
+            
         </div>
 
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
