@@ -1,18 +1,22 @@
+import googlemaps
+from datetime import datetime
 from flask import Flask, render_template
 from flask_googlemaps import GoogleMaps
 from flask_googlemaps import Map
-from flaskext.mysql import MySQL
-import googlemaps
 from key import api_key, db_pass
+from flaskext.mysql import MySQL
 
-app = Flask(__name__, template_folder=".")
+
+################### Set Globals  #########################
+
+app = Flask(__name__)
 app.config['GOOGLEMAPS_KEY'] = api_key
 GoogleMaps(app)
 gmaps = googlemaps.Client(key=api_key)
 
+################### MySQL Configurations  #########################
 mysql = MySQL()
 
-# MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = db_pass
 app.config['MYSQL_DATABASE_DB'] = 'maindb'
@@ -22,8 +26,42 @@ mysql.init_app(app)
 conn = mysql.connect()
 cursor = conn.cursor()
 
+################### Set Static Variables  #########################
+
+locations1 = [(37.4419, -96.3413), (37.4419, -96.3410)]
+mylocation = {
+             'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+             'lat': 30.6123, 
+             'lng': -96.3413,
+             'infobox': "<b>Where You Are</b>"
+          }
+defaultdoc = {
+            'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+            'lat': 30.6156, 
+            'lng': -96.3427,
+            'infobox': "<b>My Doctor</b>"
+          }
+batonrouge = {
+			'lat':30.4515,
+			'lng':-91.1971
+		  }
+
+################### Set Routes  #########################
 
 @app.route("/")
+def index():
+  return "Hello World!"
+
+@app.route('/index')
+@app.route('/signin')
+def signin():
+  return render_template('signin.html')
+
+@app.route('/create')
+def create():
+  return render_template('create.html')
+
+@app.route('/mapview')
 def mapview():
     all_symptom_locations = []
     cursor.execute("SELECT latitude, longitude, symptoms, disease FROM symptom")
@@ -43,7 +81,7 @@ def mapview():
     # creating a map in the view
     campusmap = Map(
         identifier="campusmap",
-     	lat= 30.6123, 
+      lat= 30.6123, 
         lng= -96.3413,
         markers = all_symptom_locations,
         fit_markers_to_bounds = True,
@@ -61,7 +99,7 @@ def mapview():
         streetview_control = False,
         style = "height:400px;width:400px;margin:0;"
     )
-    return render_template('index.html', campusmap=campusmap, doctormap=doctormap)
+    return render_template('maps.html', campusmap=campusmap, doctormap=doctormap)
 
 if __name__ == '__main__':
     app.run(debug=True)
